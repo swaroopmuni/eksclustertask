@@ -40,7 +40,7 @@ then
     
     # Create a Service Account and IAM Role with POLICY 
     export ROLE_NAME='AmazonEKSClusterAutoscalerRole'
-    export SA_NAME='cluster-autoscaler'
+    export SA_NAME='cluster-creation'
     
     eksctl create iamserviceaccount \
         --name ${SA_NAME} \
@@ -62,9 +62,9 @@ then
     sed  -i  "s#<ROLE ARN>#$ROLE_ARN#" cluster-creation.yaml
 
     # Replace the <YOUR CLUSTER NAME> placeholder with the CLUSTER_NAME and 
-    # Two commands under the the cluster-autoscaler deployment
+    # Two commands under the the cluster-creation deployment
     printf -v spc %12s      #adding spaces
-    sed -i "s#<YOUR CLUSTER NAME>#$CLUSTER_NAME\n${spc}- --balance-similar-node-groups\n${spc}- --skip-nodes-with-system-pods=false#g" cluster-autoscaler.yaml
+    sed -i "s#<YOUR CLUSTER NAME>#$CLUSTER_NAME\n${spc}- --balance-similar-node-groups\n${spc}- --skip-nodes-with-system-pods=false#g" cluster-creation.yaml
 
     # Deploy the manifest file
     kubectl create -f cluster-creation.yaml
